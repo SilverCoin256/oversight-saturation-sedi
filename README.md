@@ -1,104 +1,52 @@
-# Oversight Saturation & SEDI — Reproducibility Package
+# oversight-saturation-sedi
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.0000000.svg)](https://doi.org/10.5281/zenodo.0000000)
+hey! this is the code from my paper about AI governance and why human oversight breaks down when too many AI decisions pile up.
 
-This repository contains the complete reproducibility package for:
+**paper:** "Institutional Observability Under Scaled AI Governance: Deployment-Scale Capacity Degradation in Human Oversight Pipelines" — submitted to Technology in Society (Elsevier)
 
-**"Institutional Observability Under Scaled AI Governance: Deployment-Scale Capacity Degradation in Human Oversight Pipelines"**
+## what this is about
 
-*Technology in Society (Elsevier), 2026*
+basically, when companies/governments deploy AI at scale, they generate tons of compliance logs and audit trails. but the humans who are supposed to review all this stuff? they can't keep up. i called this "oversight saturation" and built a model to show how it happens.
 
-**Author:** Shaurya Gupta (ORCID: 0009-0001-7642-9247)
+the cool part is SEDI (State-Estimation Degradation Index) — it's a number you can calculate from public records to tell if an institution's oversight is actually working or just looks like it's working.
 
----
-
-## Abstract
-
-Institutions deploying AI at scale accumulate governance artifacts at rates proportional to decision volume. Human interpretive capacity does not scale proportionally. This paper identifies the resulting failure mode, *oversight saturation*, as a structural consequence of deployment architecture. The repository contains all code to reproduce the Monte Carlo simulations, figures, and SEDI index computations.
-
----
-
-## Repository Structure
+## what's in here
 
 ```
-├── README.md
-├── LICENSE
-├── CITATION.cff
-├── requirements.txt
-├── code/
-│   ├── monte_carlo_simulation.py    # Main MC simulation
-│   ├── kingman_analysis.py          # Kingman heavy-traffic analysis
-│   ├── depth_degradation.py         # D(rho) degradation function
-│   ├── sedi_computation.py          # SEDI index calculation
-│   ├── figure_generation.py         # All figure generation
-│   └── utils.py                     # Shared utilities
-├── data/
-│   ├── simulation_outputs/          # CSV outputs from MC runs
-│   └── calibration/                 # Calibration data references
-├── supplementary/
-│   ├── appendix_a_derivations.pdf   # Full mathematical derivations
-│   ├── appendix_b_sensitivity.pdf   # Sensitivity analysis
-│   └── appendix_c_scenarios.pdf     # Additional scenarios
-└── manuscript/
-    └── README.md                    # Link to published version
+code/
+  monte_carlo_simulation.py   <- the main simulation (120 runs)
+  figure_generation.py        <- makes all 5 figures from the paper
+  kingman_analysis.py         <- the 2.71x saturation proof
+  sedi_computation.py         <- calculates SEDI values
+  depth_degradation.py        <- the D(rho) function
+  utils.py                    <- shared stuff
+
+figures/                      <- all the output figures (pdf)
+requirements.txt              <- what you need to install
 ```
 
----
+## how to run it
 
-## Quick Start
-
-### Prerequisites
-
-- Python 3.10+
-- pip
-
-### Installation
+you need python 3.10+ and then:
 
 ```bash
-git clone https://github.com/shauryagupta/oversight-saturation-sedi.git
-cd oversight-saturation-sedi
 pip install -r requirements.txt
-```
-
-### Reproduce All Results
-
-```bash
-# Run Monte Carlo simulation (120 runs, ~30 seconds)
 python code/monte_carlo_simulation.py
-
-# Generate all 5 figures
 python code/figure_generation.py
-
-# Compute SEDI values
 python code/sedi_computation.py
 ```
 
-### Expected Output
+the simulation takes like 30 seconds on a normal laptop. it'll spit out csv files with all the results and regenerate the figures.
 
-- `data/simulation_outputs/queue_lengths.csv` — Queue lengths across utilization levels
-- `data/simulation_outputs/review_depths.csv` — Review depth values
-- `data/simulation_outputs/sedi_values.csv` — SEDI index across deployment stages
-- All figures regenerated in the `figures/` directory
+## parameters i used
 
----
+- μ₀ = 1.0 (service rate)
+- ρc = 0.60 (the alert fatigue threshold — from Parasuraman & Riley 1997)
+- k = 3.50 (how fast review quality drops)
+- σ = 1.30 (log-normal spread for human review times)
+- 120 monte carlo runs, 3000 cases each
 
-## Key Parameters
-
-| Symbol | Value | Description |
-|---|---|---|
-| μ₀ | 1.0 case/min | Normalised service rate |
-| ρc | 0.60 | Alert-fatigue threshold |
-| k | 3.50 | Cognitive decay rate |
-| Dmax | 1.0 | Maximum review depth |
-| σ | 1.30 | Log-normal dispersion |
-| N_MC | 120 | Monte Carlo runs |
-
----
-
-## Citation
-
-If you use this code or data, please cite:
+## if you want to cite this
 
 ```bibtex
 @article{gupta2026institutional,
@@ -111,14 +59,10 @@ If you use this code or data, please cite:
 }
 ```
 
----
+## license
 
-## License
+MIT — do whatever you want with the code, just give credit.
 
-MIT License — see [LICENSE](LICENSE) for details.
+## contact
 
----
-
-## Contact
-
-Shaurya Gupta — shauryagupta042@gmail.com — [ORCID: 0009-0001-7642-9247](https://orcid.org/0009-0001-7642-9247)
+shauryagupta042@gmail.com | [ORCID](https://orcid.org/0009-0001-7642-9247)

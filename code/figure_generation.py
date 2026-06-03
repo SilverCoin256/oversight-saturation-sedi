@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 """
-Figure generation for:
-"Institutional Observability Under Scaled AI Governance:
- Deployment-Scale Capacity Degradation in Human Oversight Pipelines"
-
-Generates all 5 figures as described in the manuscript.
+generates all 5 figures from my oversight saturation paper
+just run it and it'll recreate everything in the figures/ folder
 """
 
 import numpy as np
@@ -12,10 +9,10 @@ from scipy import stats
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle
+from matplotlib.patches import FancyBboxPatch
 import os
 
-# Set style
+# plot style
 plt.rcParams.update({
     'font.family': 'serif',
     'font.size': 10,
@@ -30,48 +27,35 @@ plt.rcParams.update({
 OUTPUT_DIR = 'figures'
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# ============================================================
-# CANONICAL PARAMETERS (Table 1)
-# ============================================================
-mu0 = 1.0       # Normalised service rate (cases/min)
-rho_c = 0.60    # Alert-fatigue threshold
-k = 3.50        # Cognitive decay rate
-Dmax = 1.0      # Max review depth
-sigma = 1.30    # Log-normal dispersion
-N_MC = 120      # Monte Carlo runs
-N_sim = 3000    # Cases per condition
+# params from table 1
+mu0 = 1.0
+rho_c = 0.60
+k = 3.50
+Dmax = 1.0
+sigma = 1.30
+N_MC = 120
+N_sim = 3000
 SEED = 42
 
 np.random.seed(SEED)
 
-# ============================================================
-# DEGRADATION FUNCTION (Equation 2)
-# ============================================================
 def D_rho(rho, rho_c=0.60, k=3.50, Dmax=1.0):
-    """Review depth degradation function."""
+    """review depth degradation (equation 2)"""
     return Dmax * np.exp(-k * np.maximum(rho - rho_c, 0))
 
-# ============================================================
-# KINGMAN APPROXIMATION (Equations 3-4)
-# ============================================================
 def kingman_E_L(rho, Ca2=1.0, sigma=1.30):
-    """Kingman heavy-traffic approximation for expected queue length."""
-    Cs2 = np.exp(sigma**2) - 1  # ≈ 4.42
-    multiplier = (Ca2 + Cs2) / 2  # ≈ 2.71
-    # Avoid division by zero
+    """kingman bound for queue length (equations 3-4)"""
+    Cs2 = np.exp(sigma**2) - 1
+    multiplier = (Ca2 + Cs2) / 2
     rho_safe = np.clip(rho, 0.001, 0.999)
     return (rho_safe / (1 - rho_safe)) * multiplier
 
-# ============================================================
-# MONTE CARLO SIMULATION
-# ============================================================
+# ---- monte carlo simulation ----
 def run_monte_carlo():
-    """Run Monte Carlo simulation across utilization levels."""
+    """run the full MC simulation across all rho levels"""
     rho_levels = np.linspace(0.05, 0.97, 50)
     results = {'rho': [], 'E_L': [], 'E_L_std': [], 'D_mean': [], 'D_std': []}
     
-    # Log-normal service time parameters
-    # Mean = 1/mu0, sigma given
     mu_ln = np.log(1/mu0) - 0.5 * sigma**2
     
     for rho in rho_levels:
@@ -122,9 +106,7 @@ def run_monte_carlo():
     
     return results
 
-# ============================================================
-# FIGURE 1: SATURATION CURVE
-# ============================================================
+# ---- figure 1: saturation curve ----
 def fig_saturation():
     """Figure 1: Queue length vs utilization + review depth degradation."""
     print("Generating Figure 1: Saturation Curve...")
@@ -192,9 +174,7 @@ def fig_saturation():
     plt.close()
     print("  -> fig_saturation.pdf saved")
 
-# ============================================================
-# FIGURE 2: O(N)/O(log N) DIVERGENCE
-# ============================================================
+# ---- figure 2: O(N) vs O(log N) ----
 def fig_divergence():
     """Figure 2: Governance artifact volume vs operational review capacity."""
     print("Generating Figure 2: Divergence Plot...")
@@ -242,9 +222,7 @@ def fig_divergence():
     plt.close()
     print("  -> fig_divergence.pdf saved")
 
-# ============================================================
-# FIGURE 3: ACCOUNTABILITY ROUTING ARCHITECTURE
-# ============================================================
+# ---- figure 3: routing architecture ----
 def fig_routing():
     """Figure 3: Accountability routing architecture diagram."""
     print("Generating Figure 3: Routing Architecture...")
@@ -311,9 +289,7 @@ def fig_routing():
     plt.close()
     print("  -> fig_routing.pdf saved")
 
-# ============================================================
-# FIGURE 4: REVIEW DEPTH KDE
-# ============================================================
+# ---- figure 4: review depth KDE ----
 def fig_depth_kde():
     """Figure 4: Kernel density estimates of per-case review depth."""
     print("Generating Figure 4: Review Depth KDE...")
@@ -369,9 +345,7 @@ def fig_depth_kde():
     plt.close()
     print("  -> fig_depth_kde.pdf saved")
 
-# ============================================================
-# FIGURE 5: SEDI DEGRADATION
-# ============================================================
+# ---- figure 5: SEDI degradation ----
 def fig_sedi():
     """Figure 5: SEDI across deployment stages."""
     print("Generating Figure 5: SEDI Degradation...")
@@ -440,9 +414,7 @@ def fig_sedi():
     plt.close()
     print("  -> fig_sedi.pdf saved")
 
-# ============================================================
-# MAIN
-# ============================================================
+# ---- run everything ----
 if __name__ == '__main__':
     print("=" * 60)
     print("Generating all figures for Technology in Society submission")
