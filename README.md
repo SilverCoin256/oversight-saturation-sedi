@@ -13,7 +13,7 @@ the cool part is SEDI (State-Estimation Degradation Index) — it's a number you
 ## what's in here
 
 ```
-code/
+simulation/
   monte_carlo_simulation.py   <- the main simulation (120 runs)
   figure_generation.py        <- makes all 5 figures from the paper
   kingman_analysis.py         <- the 2.71x saturation proof
@@ -22,6 +22,7 @@ code/
   utils.py                    <- shared stuff
 
 figures/                      <- all the output figures (pdf)
+manuscript/                   <- the paper + cover letter (pdf)
 requirements.txt              <- what you need to install
 ```
 
@@ -31,9 +32,9 @@ you need python 3.10+ and then:
 
 ```bash
 pip install -r requirements.txt
-python code/monte_carlo_simulation.py
-python code/figure_generation.py
-python code/sedi_computation.py
+python simulation/monte_carlo_simulation.py
+python simulation/figure_generation.py
+python simulation/sedi_computation.py
 ```
 
 the simulation takes like 30 seconds on a normal laptop. it'll spit out csv files with all the results and regenerate the figures.
