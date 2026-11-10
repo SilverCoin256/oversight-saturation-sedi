@@ -33,6 +33,8 @@ python simulation/sedi_computation.py
 
 The scripts write simulation results as CSV files and regenerate the figures.
 
+In the bundled six-stage example, [the SEDI script](simulation/sedi_computation.py) reports 0 at every stage while modeled review depth falls from 1.000 to 0.326. The script bounds the variance-ratio calculation between 0 and 1. With these inputs, it stays at the lower bound.
+
 ## Simulation parameters
 
 - μ₀ = 1.0 (service rate)
