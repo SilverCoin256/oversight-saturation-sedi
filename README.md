@@ -1,16 +1,10 @@
 # oversight-saturation-sedi
 
-hey! this is the code from my paper about AI governance and why human oversight breaks down when too many AI decisions pile up.
+Simulation code for *Institutional Observability Under Scaled AI Governance: Deployment-Scale Capacity Degradation in Human Oversight Pipelines*, submitted to *Technology in Society*.
 
-**paper:** "Institutional Observability Under Scaled AI Governance: Deployment-Scale Capacity Degradation in Human Oversight Pipelines" — submitted to Technology in Society (Elsevier)
+The model tests how review depth changes as workload approaches the capacity of a human review queue. The State-Estimation Degradation Index (SEDI) uses observable traces of the queue to estimate changes in review depth under the model’s assumptions.
 
-## what this is about
-
-basically, when companies/governments deploy AI at scale, they generate tons of compliance logs and audit trails. but the humans who are supposed to review all this stuff? they can't keep up. i called this "oversight saturation" and built a model to show how it happens.
-
-the cool part is SEDI (State-Estimation Degradation Index) — it's a number you can calculate from public records to tell if an institution's oversight is actually working or just looks like it's working.
-
-## what's in here
+## Repository contents
 
 ```
 simulation/
@@ -26,20 +20,22 @@ manuscript/                   <- the paper + cover letter (pdf)
 requirements.txt              <- what you need to install
 ```
 
-## how to run it
+## Run the simulation
 
-you need python 3.10+ and then:
+Use Python 3.10 or newer.
 
 ```bash
 pip install -r requirements.txt
-python simulation/monte_carlo_simulation.py
+(cd simulation && python monte_carlo_simulation.py)
 python simulation/figure_generation.py
 python simulation/sedi_computation.py
 ```
 
-the simulation takes like 30 seconds on a normal laptop. it'll spit out csv files with all the results and regenerate the figures.
+The scripts write simulation results as CSV files and regenerate the figures.
 
-## parameters i used
+In the bundled six-stage example, [the SEDI script](simulation/sedi_computation.py) reports 0 at every stage while modeled review depth falls from 1.000 to 0.326. The script bounds the variance-ratio calculation between 0 and 1. With these inputs, it stays at the lower bound.
+
+## Simulation parameters
 
 - μ₀ = 1.0 (service rate)
 - ρc = 0.60 (the alert fatigue threshold — from Parasuraman & Riley 1997)
@@ -47,7 +43,7 @@ the simulation takes like 30 seconds on a normal laptop. it'll spit out csv file
 - σ = 1.30 (log-normal spread for human review times)
 - 120 monte carlo runs, 3000 cases each
 
-## if you want to cite this
+## Citation
 
 ```bibtex
 @article{gupta2026institutional,
@@ -60,10 +56,10 @@ the simulation takes like 30 seconds on a normal laptop. it'll spit out csv file
 }
 ```
 
-## license
+## License
 
-MIT — do whatever you want with the code, just give credit.
+The code is available under the [MIT License](LICENSE).
 
-## contact
+## Contact
 
 shauryagupta042@gmail.com | [ORCID](https://orcid.org/0009-0001-7642-9247)
