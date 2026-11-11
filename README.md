@@ -31,7 +31,7 @@ python simulation/figure_generation.py
 python simulation/sedi_computation.py
 ```
 
-The scripts write simulation results as CSV files and regenerate the figures.
+The scripts write simulation results as CSV files and regenerate the figures. The recovered output includes [6,000 runs](data/simulation_outputs/queue_lengths.csv) and [summaries for 50 utilization levels](data/simulation_outputs/review_depths.csv). Both files match a fresh run of the repository script byte for byte.
 
 In the bundled six-stage example, [the SEDI script](simulation/sedi_computation.py) reports 0 at every stage while modeled review depth falls from 1.000 to 0.326. The script bounds the variance-ratio calculation between 0 and 1. With these inputs, it stays at the lower bound.
 
